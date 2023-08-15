@@ -12,3 +12,5 @@ class Product {
         // no need to function keyword
     }
 }
+// Syntax to create an object
+const p = new Product();

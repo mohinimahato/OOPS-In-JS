@@ -33,7 +33,7 @@ Using this we can create entities/objects
 
 Now these 3 kewords together i.e  *`class`*, *`new`* and *`this`* forms the basis of how we write OOPs in JS
 
-- [Class Demo](./Demo/class_Demo.js)
+-Syntax to create a  [Class](./Demo/class_Demo.js)
 ```Javascript
 class Product {
     // no need of let var const
@@ -51,3 +51,12 @@ class Product {
 }
 ```
 
+- Syntax to create an [object](./Demo/class_Demo.js)
+```Javascript
+const p = new Product();
+```
+To understand the syntax of object, we need to first understand `this`
+
+- [*`this`* ](./Demo/this_demo.js)keyword: except one case `this` always refers to the calling site/context. From what context and what reference we are calling it makes the difference . **this** will not always point to the same object from which we are making the function call 
+
+- The one case where *`this`* doesn't refer to the calling context is when *`arrow function`* is getting used. Inside arrow function this doesn't refer to the calling context. By default in arrow function this is going to be resolved lexically. [Code Demo](./Demo/this_demo2.js)
