@@ -148,3 +148,10 @@ console.log(p)
 // Product { name: 'Bag', price: 'a cool bag', desc: 100 }
 ```
 
+----
+- What is an *access modifier* ?
+-> Access modifier's maintaince what is visible outside and what is not visible outside
+Javascript has a shorthand: *`#NameOfTheVariableThatNeedsToBePrivate`*
+
+- Abstraction: 
+----
