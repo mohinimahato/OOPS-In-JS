@@ -150,8 +150,74 @@ console.log(p)
 
 ----
 - What is an *access modifier* ?
--> Access modifier's maintaince what is visible outside and what is not visible outside
-Javascript has a shorthand: *`#NameOfTheVariableThatNeedsToBePrivate`*
+-> Access modifier maintaince what is visible outside and what is not visible outside in a class
+To make it private Javascript has a shorthand: *`#NameOfTheVariableThatNeedsToBePrivate`*
 
-- Abstraction: 
+- Let's say we want to expose a functionality to user from where they can get some properties and set some properties, do we need to make them public? 
+-> NO, we can make getter setter's
+
+```Javascript
+class Product {
+
+    #name; //private
+    constructor(n, p, d) {
+        this.name = n;
+        this.price = p;
+        this.desc = d;
+    }
+
+    // setter
+    setName(n) {
+        if (typeOf(n) = ! 'string') {
+            console.log("Invalid name passes");
+            return;
+        }
+        this.#name = n;
+    }
+    // getter
+    getName(n){
+        return this.#name;
+    }
+
+}
+const p = new Product("Bag", 100, "a cool bag");
+p.setName(-1);
+// Invalid name passed
+console.log(p)
+// Product { name: 'Bag', price: 'a cool bag', desc: 100 }
+```
+----
+Well in Js we get better syntax to write getter and setters, So it doesn't look like function and still looks like we are setting a value only but while setting also a whole set of logic that gets executed. We can use the `get` and `set` keyword. So now we access them as properties not function. 
+```Javascript
+class Product {
+
+    #name; //private
+    constructor(n, p, d) {
+        this.name = n;
+        this.price = p;
+        this.desc = d;
+    }
+
+    // setter
+    set setName(n) {
+        if (typeOf(n) = ! 'string') {
+            console.log("Invalid name passes");
+            return;
+        }
+        this.#name = n;
+    }
+    // getter
+    get getName(n){
+        return this.#name;
+    }
+
+}
+const p = new Product("Bag", 100, "a cool bag");
+p.setName = "test";
+// Invalid name passed
+console.log(p)
+// Product { name: 'Bag', price: 'a cool bag', desc: 100 }
+```
+
+So, this how we extract out internal details of class from the outside out that is not necessary for other to know
 ----

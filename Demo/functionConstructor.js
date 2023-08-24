@@ -6,3 +6,5 @@ function Product(n, d, p) {
 const p = new Product("Bag", 100, "a cool bag");
 console.log(p)
 // Product { name: 'Bag', price: 'a cool bag', desc: 100 }
+
+
