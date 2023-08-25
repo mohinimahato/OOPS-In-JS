@@ -220,4 +220,18 @@ console.log(p)
 ```
 
 So, this how we extract out internal details of class from the outside out that is not necessary for other to know
+
 ----
+
+## *Prototype Based Inheritance*
+- Traditional OOPs: In traditional languages such as C++, Java we have a abstract blueprint and *based* on these blueprint we actually create real life entities.
+
+<p align="center">
+  <img width="100%" height="100%" src="./Notes-Screenshots/TraditionalOOPs.png">
+</p>
+
+- In JS the objects are not *based* on the blueprints they are technically *linked* to the blueprint.
+What is this *linking* then? And what happens when we run a JS code?
+-> When we try to run a JS code a lot of thing ofcourse happens a lexical scope gets created and all that. But there is one more thing that happens before the first line of code actually gets executed and this particular is extremely important w.r.t *How classes and objects works in JS*. Now we will take a deep dive and try to understand what is this and what it does with overall architecture of Javascript.
+
+- A lot of time we might have seen capital "O"bject
