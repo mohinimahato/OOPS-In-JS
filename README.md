@@ -234,4 +234,180 @@ So, this how we extract out internal details of class from the outside out that 
 What is this *linking* then? And what happens when we run a JS code?
 -> When we try to run a JS code a lot of thing ofcourse happens a lexical scope gets created and all that. But there is one more thing that happens before the first line of code actually gets executed and this particular is extremely important w.r.t *How classes and objects works in JS*. Now we will take a deep dive and try to understand what is this and what it does with overall architecture of Javascript.
 
-- A lot of time we might have seen capital "O"bject
+- A lot of time we might have seen capital "O"bject. 
+<p align="center">
+  <img width="100%" height="100%" src="./Notes-Screenshots/CapitalO.png">
+</p>
+and the fun part is that it's a function. It looks like an object but technically it's a function and if we actually start using this Object, something like Object.keys() this function also provides us a bunch of properties that we can actually use let's say we pass an object and it returns the keys of the corresponding object .
+<p align="center">
+  <img width="100%" height="100%" src="./Notes-Screenshots/ExtraUtilityFunc.png">
+</p>
+So, this "O"bject is technically a function which not only just provides us an object based functionality but us some extra properties like .keys() .value() that are extra utility function with us.
+
+## *First Setup Before The Code Execution:*
+<p align="center">
+  <img width="100%" height="100%" src="./Notes-Screenshots/First-Setup-Before-Code-Execution.png">
+</p>
+
+
+- Js maintains a function that we already know as "O"bject
+ this function provide us a lot of feature for example `Object.keys` `Object.values` all of these are directly provided to us by this coresponding function, apart from this there is one more `object` and this is one of the most important `object` in the whole architecture of JS. Some very important utility function such as `toString`, `valueOf` all of these function that we never declared for our own object but we are able to invoke in an object are actually present in this object so what's the name of this object, in JS there's no specific name given to this object but we can refer to this object via a property on the 'O'bject that is known as *`prototype`*.
+
+ - When we do  `object.prototype` then we are referening from the `Object` and there is a reverse chaining also that from `object` actually we have a property that refers back to `Object` function and that property is known as `constructor`. 
+
+- Repeating what I just understood: Before the code starts executing there is a function named as capital "O"bject. We can actually call it as function it returns brand new plain object. And this functions has some properties such as `.keys` `.values` etc together with all these properties it has one more property as  `.prototype`. This `.prototype` actually points to another JS `object` because this JS `object` has all the functions/properties  like  `toString`, `valueOf` and all those functions/properties that are available on an object but we never wrote it ourselves. On this `object` we have one more property/function named as `constructor` same as toString and valueOf that actually points back to the original "O"bject
+<p align="center">
+  <img width="100%" height="100%" src="./Notes-Screenshots/CapitalO.png">
+</p>
+
+----
+
+- Few question might arise 
+1. why we are doing the reverse chaining that from "Object" we are refering to prototype and from prototype we are refering to constructor. 
+2. What is the use of prototype? Why we are using it and need it? Why this 'O'bject is pointing to the prototype? And what is a prototype chaining
+
+
+## *Now let's move to our second setup:*
+<p align="center">
+  <img width="100%" height="100%" src="./Notes-Screenshots/Second-setup.png">
+</p>
+-> We have been given the first setup and now we wrote some code
+
+```Javascript
+function Product(n,p){
+    this.name = n,
+    this.price = p
+}
+```
+What is a Product here?
+It's technically a function
+```Javascript
+Product ⏎
+f Product(n,p){
+    this.name = n;
+    this.price = p;
+}
+```
+Now, if we do `Product.` we start seeing a bunch of properties that we can actually call and one of the properties is named as *`prototype`*
+
+- So, we created a new function product and on this product function we have property called *`.prototype`* and if we carefully see what *`.prototype`* is giving us, it giving us another object
+
+```Javascript
+Product.prototype ⏎
+{constructor: f}
+```
+- That means the moment we create a function product along with that function there is an object that gets created. And we refer this object using *`.prototype`*. And if we carefully see from this object also there's an property *constructor* that goes from *`Product.prototype`* to point to Product. So if we do *`Product.prototype.constructor`* it's refering back to the function Product
+
+
+```Javascript
+Product.prototype.constructor ⏎
+f Product(n,p){
+    this.name = n;
+    this.price = p;
+}
+```
+
+- A similar setup that exist with "O"bject exist here.
+
+### Summarising everything we understood till now
+
+- Before our code executing there's a capital "O"bject function on this function there are bunch of properties. One of the properties is `Object.prototype` that points to another `object` on this `object` there are some of the most important properties  exist, this `object` has a property `constructor`  which points back to the "O"bject. *This was the pre-setup*
+
+- Post setup when we start executing our code, let's say we wrote a function Product, in the function Product we have property prototype which is again pointng to an object and this object has a property constructor which is pointing back to product. 
+
+- With any function that we are having we will have the same functionality actually going on behind the scenes . All of these will start making sense because all of these used to be the actual regular part of JS code before the intervention of class based wrappers . So we will understand `How constructor and everything works?`
+
+- What's the meaning of the word prototype in plain english?
+It refers to the word model or design, So using this we will actually prepare blueprints  a models and lot of stuff everything we are doing with classes we will be able to do with this
+
+## *Third part of our setup:*
+<p align="center">
+  <img width="100%" height="100%" src="./Notes-Screenshots/Third-setup.png">
+</p>
+
+- *Product.prototype* is actually internally linked/referenced with *Object.prototype*. 
+
+- We have the function Product, now if we do: 
+
+```Javascript
+const iPhone = new Product("iPhone 14", 1000000) ⏎
+```
+
+So we know that when we call the new keyword a brand new plain empty object is created and then we are technically calling the product function. But behind the scenes something more happens.
+
+- The moment we hit `new`
+(Step 1) It creates a brand new empty object
+(Step 2) Before anything else happens this object is actually linked with `Product.prototype`
+(Step 3) We assign a `this` keyword which refers to the call site(the brand new empty object is the call site). And then we start executing the function Product which says this.name and this.price . So we assign a name property and a price property.
+
+Atlast if we haven't manually returned another object from the function Product, JS will assume that we wanted to return ("iPhone 14", 1000000), and this object gets returned and stored in the variable iPhone.
+
+So, the step 2 is the crux of whatever we were doing.
+
+- Sanket talked about the product function to be constructor. Now just think on the brand new empty object we link this with Product.prototype and we try to call the constructor Product with respect to the iPhone object . Now the iphone doesn't have its own constructor but this object is linked to another object which has a property constructor that is refering to our product function and this is where things start becoming interesting and we will see *How all of this linkage is actually going to help us*
+
+- If we do 
+
+ ```Javascript
+Product.prototype.display = function (){
+    console.log("Details of the product are", this )
+    } ⏎
+```
+What we have done is on our `Product.prototype` we have assigned a new function `display`.  If we do
+
+ ```Javascript
+iPhone.display()⏎
+// Details of the product are 
+// > product {name: 'Iphone 14', price: '1000000'}
+```
+
+So what is going on?
+-> During runtime we come to our object, if we say *iPhone.xyz()* what will happen is, JS will check does your object iPhine has property *xyz* the answer is NO. So, what it will do is it will go one step above in the prototypal chain and see does Product.prototype has the display property, YES it has the display property/function and now it'll call it.
+
+- So, we made changes to our prototype and those changes are actually reflecting in the object and that is why if we do something like `iPhone.toString()`  we get `[Object object]`
+
+ ```Javascript
+iPhone.toString()⏎
+// [Object object]
+```
+Just think about it do we have toString property in iPhone obejct? NO, we go one level up
+Do we have toString property in Product.prototype ? NO, we go one level up
+Does Object.prototype has toString property? YES, and that's where the toString function comes up.
+
+- This is the essence of how exactly *`prototypal chaining`* works. Your obejct is chained to a prototype that is chained to another prototype and so on...
+
+- Now let's say we make a class Product{} and put a constructor(){}
+
+ ```Javascript
+class Product{
+    constructor(n,p){
+        this.name = n;
+        this.price = p;
+    }
+}⏎
+// If we see Product
+Product⏎
+class Product{
+    constructor(n,p){
+        this.name = n;
+        this.price = p;
+    }
+}
+Product.prototype ⏎
+{constructor: ƒ}
+Product.prototype.constructor ⏎
+class Product{
+    constructor(n,p){
+        this.name = n;
+        this.price = p;
+    }
+}
+```
+If we see product, its returing a class and if we do Product.prototype, its refering to a object and that object has a constructor property that's refering back to our class. So if we see it's the same architecture here, that's why we say that classes are just the wrapper over what we have as functions it doesn't change a lot of things.
+
+
+---
+
+- We can use this architecture to do a lot of inheritance things
+
+
