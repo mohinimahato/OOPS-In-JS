@@ -406,8 +406,67 @@ class Product{
 If we see product, its returing a class and if we do Product.prototype, its refering to a object and that object has a constructor property that's refering back to our class. So if we see it's the same architecture here, that's why we say that classes are just the wrapper over what we have as functions it doesn't change a lot of things.
 
 
+- When we see [[Prototype]] that is actually refering to the prototype object we are kind of linked to, to programatically access the prototype we can do something like` __proto__`
+
+- `__proto__`: also known as Dunder proto is a property of Object.prototype and it dynamically resolves what is the prototype chaining of the calling context . If we do iPhone.__proto__ it'll refer to product.prototype, so how does it determine that what `iPhone.__proto__ ` should point to being a property of Object.prototype. 
+
+This __proto__ invokes a function internally and it'll check which object is the calling context, for this example iPhone is the calling context so it dynamically resolves who is the prototype of iPhone
+
+
 ---
 
 - We can use this architecture to do a lot of inheritance things
 
+- Let's say we have class A and class B, and if we want to do inheritance in JS we can technically say class B extends A{}
+also create a new object b
+```Javascript
+class A {} ⏎
+class B extends A{} ⏎
+
+b = new B();
+//  b points to prototype A and  is pointing to prototype of Object
+```
+that is why let's say we have class Category and constructor(c){this.categoryname = c;} and we have class Product that extends Category also has a constructor(n,c) and we say this.name = n, we can have `super` keyword as `super(c)` to actually pass c to the super class. Now if we create a new object p lets see what happens
+
+```Javascript
+class Category {
+    constructor(c){
+        this.categoryname = c;
+    }
+} ⏎
+class Product extends Category{
+    constructor(n,c){
+        super(c);
+        this.name = n;
+    }
+} ⏎
+
+p = new Product('iPhone', 'mobiles');
+// Product {categoryname: 'mobiles', name: 'iPhone'}
+```
+p has a property categoryname and how is it coming, its because we called the super keyword, super refers to the same class mentioned by the prototype (Category)
+
+- So, technically bts when we do class B extends A its actually doing nothing but creating some kind of prototypal chaining
+
+- We can do the same thing using functions as well
+```Javascript
+function A {
+} ⏎
+function B {
+} ⏎
+
+// if we do ---
+new A(); ⏎
+// the prototype of A is directly Object.prototype
+new B(); ⏎
+// the prototype of B is directly Object.prototype
+
+// If we do 
+Object.setPrototypeOf(A.prototype, B.prototype)
+// and now 
+X = new A()
+X ⏎
+// Technically pointing to B's prototype, as A is pointing to B's prototype
+```
+This is how we can create inheritance directly using functions, and this is how things starts shaping up and this is something we always should keep in mind that internally when we do extends it's not actually just creating a copy of inheritant stuff but instead if the base classes or the base functions makes any changes the changes will reflect in your corresponding new object as well and that's how *Inheritance with JS* works. One more simple thing we can see our prototype at one point can point to another prototype so we can have *multilevel inheritance*, not *multiple inheritance*
 
